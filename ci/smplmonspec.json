@@ -119,17 +119,17 @@
                 "timeseries" : "com.dynatrace.builtin:service.responsetime",
                 "aggregate" : "avg",
                 "validate" : "upper",
-                "upperlimit" : 1200000
+                "upperSevere": 1200000
             },
             { 
                 "timeseries" : "com.dynatrace.builtin:service.responsetime",
                 "aggregate" : "p90",
-                "upperlimit" : 1400000
+                "upperSevere": 1400000
             },
             { 
                 "timeseries" : "com.dynatrace.builtin:service.failurerate",
                 "aggregate" : "avg",
-                "upperlimit" : 5
+                "upperSevere": 5
             },
             { 
                 "timeseries" : "com.dynatrace.builtin:service.requestspermin",
@@ -138,20 +138,20 @@
             },
             {
                 "smartscape" : "toRelationships:calls",
-                "upperlimit" : "5",
+                "upperSevere": "5",
                 "aggregate" : "count",
                 "validate" : "lower"
             },
             {
                 "smartscape" : "fromRelationships:runsOn",
                 "aggregate" : "count",
-                "lowerlimit": "1",
+                "upperWarning": "1",
                 "validate" : "lower"
             },
             {
                 "smartscape" : "fromRelationships:calls",
                 "aggregate" : "count",
-                "lowerlimit": "1",
+                "upperWarning": "1",
                 "validate" : "lower"
             }
         ],

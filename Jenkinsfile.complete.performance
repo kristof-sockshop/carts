@@ -20,10 +20,38 @@ pipeline {
     APP_NAME = "carts"
   }
   stages {
-    stage('Performance Check') {
+    stage('Warm up') {
       steps {
         checkout scm
 
+        container('jmeter') {
+          script {
+            def status = executeJMeter ( 
+              scriptName: "jmeter/${env.APP_NAME}_perfcheck.jmx",
+              resultsDir: "PerfCheck_Warmup_${env.APP_NAME}_${env.VERSION}_${BUILD_NUMBER}",
+              serverUrl: "${env.APP_NAME}.dev", 
+              serverPort: 80,
+              checkPath: '/health',
+              vuCount: 1,
+              loopCount: 10,
+              LTN: "PerfCheck_Warmup_${BUILD_NUMBER}",
+              funcValidation: false,
+              avgRtValidation: 4000
+            )
+            if (status != 0) {
+              currentBuild.result = 'FAILED'
+              error "Performance check failed."
+            }
+          }
+        }
+        
+        echo "Waiting for a minute to not skew data in DT"
+        sleep(60)
+      }
+    }
+
+    stage('Performance Check') {
+      steps {
         recordDynatraceSession(
           envId: 'Dynatrace Tenant',
           testCase: 'loadtest',
@@ -34,12 +62,12 @@ pipeline {
             script {
               def status = executeJMeter ( 
                 scriptName: "jmeter/${env.APP_NAME}_perfcheck.jmx",
-                resultsDir: "PerfCheck_${env.APP_NAME}",
+                resultsDir: "PerfCheck_${env.APP_NAME}_${env.VERSION}_${BUILD_NUMBER}",
                 serverUrl: "${env.APP_NAME}.dev", 
                 serverPort: 80,
                 checkPath: '/health',
-                vuCount: 10,
-                loopCount: 250,
+                vuCount: 5,
+                loopCount: 500,
                 LTN: "PerfCheck_${BUILD_NUMBER}",
                 funcValidation: false,
                 avgRtValidation: 4000
@@ -51,6 +79,9 @@ pipeline {
             }
           }
         }
+
+        echo "Waiting for a minute so data can be processed in Dynatrace"
+        sleep(60)
 
         perfSigDynatraceReports(
           envId: 'Dynatrace Tenant', 

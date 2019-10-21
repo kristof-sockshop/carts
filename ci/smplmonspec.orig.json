@@ -130,7 +130,7 @@
                 "timeseries" : "com.dynatrace.builtin:service.responsetime",
                 "aggregate" : "avg",
                 "validate" : "upper",
-                "upperlimit" : 200000,
+                "upperSevere": 200000,
                 "_lowerlimit" : 500,
                 "_comment_aggregate" : "Depending on the metric can be: min, max, avg, sum, median, count, pXX (=XX th percentile) ",
                 "_comment_validate" : "Defines whether we compare the upper or lower boundary of the calculated value bandwidth. Default is upper as for most metrics (response time, failure rate) we dont want the value to exceed our upper threshold",
@@ -140,12 +140,12 @@
             { 
                 "timeseries" : "com.dynatrace.builtin:service.responsetime",
                 "aggregate" : "p90",
-                "upperlimit" : 400000
+                "upperSevere": 400000
             },
             { 
                 "timeseries" : "com.dynatrace.builtin:service.failurerate",
                 "aggregate" : "avg",
-                "upperlimit" : 5
+                "upperSevere": 5
             },
             { 
                 "timeseries" : "com.dynatrace.builtin:service.requestspermin",
@@ -154,20 +154,20 @@
             },
             {
                 "smartscape" : "toRelationships:calls",
-                "upperlimit" : "1",
+                "upperSevere": "1",
                 "aggregate" : "count",
                 "validate" : "lower"
             },
             {
                 "smartscape" : "fromRelationships:runsOn",
                 "aggregate" : "count",
-                "lowerlimit": "1",
+                "upperWarning": "1",
                 "validate" : "lower"
             },
             {
                 "smartscape" : "fromRelationships:calls",
                 "aggregate" : "count",
-                "lowerlimit": "1",
+                "upperWarning": "1",
                 "validate" : "lower"
             }
         ],

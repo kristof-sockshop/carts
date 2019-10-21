@@ -8,12 +8,8 @@ pipeline {
     APP_NAME = "carts"
   }
   stages {
-    stage('Performance Check') {
-      steps {
+    // Enter stages here
 
 
-
-      }
-    }
   }
 }
